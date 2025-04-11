@@ -1,0 +1,69 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 mt-4">
+            <%= form_for @employee, url: employeeinfodetails_path(@employee), method: :post do |f| %>
+                <div class="mb-2">
+                    <span>First name: </span>
+                    <%= f.text_field :firstname, required: true %>
+                </div>
+                  <div class="mb-2">
+                    <span>Last name: </span>
+                    <%= f.text_field :lastname, required: true %>
+                </div>
+
+                <div class="mb-2">
+                    <span>Cv file: </span>
+                    <%= file_field_tag :cv, required: true %>
+                </div>
+
+                <div class="mb-2">
+                    <span>Photo file: </span>
+                    <%= file_field_tag :photo, required: true %>
+                </div>
+
+                <div class="mb-4">
+                    <span>Pan card pic blob: </span>
+                    <%= f.file_field :pan_card, required: true %>
+                </div>
+
+                <div class="mb-2">
+                    <h5>Certificates</h5>
+                </div>
+                <div class="mb-2">
+                    <%= link_to 'Add Certificates', 'javascript:void(0)', 
+                    class: 'btn btn-primary add-certicate' %>
+                </div>
+                <div class="certificate_list">
+                </div>
+                 <div class="mb-2">
+                    <%= f.submit :Submit, class: 'btn btn-success submit-emp-form' %>
+                </div>
+                <div class="mb-2">
+                    <%= link_to 'Back', employeeinfodetails_path, class: 'btn btn-secondary' %>
+                </div>
+
+            <% end %>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="certificate_fields d-none">
+    <div class="certi-box mb-2">
+        <div class="row">
+            <div class="col-8">
+    <%= file_field_tag "employee[employeecertificates_attributes][][certi]", 
+    class: "form-control certificate-file" %>
+            </div>
+            <div class="col-4">
+                <%= link_to "javascript:void(0)", 
+                class: 'btn btn-danger remove_certi' do %>
+                    <i class="bi bi-trash"></i>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>
