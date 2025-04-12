@@ -7,12 +7,12 @@
         		<%= "#{@employee.firstname} #{@employee.lastname}" %>
         	</h4>
         	<div class="mb-1">
-        		<span>CV</span>
+        		<span>CV: </span>
         		<%= link_to @cv_file_path, employees_download_file_path(download_path: @cv_file_path) %>
         	</div>
 
         	<div class="mb-1">
-        		<span>Photo</span>
+        		<span>Photo: </span>
         		<%= link_to @my_pic_file_path, employees_download_file_path(download_path: @my_pic_file_path) %>
         	</div>
 
@@ -28,7 +28,7 @@
         	</div>
 
         	<div>
-        		<div>Certificates</div>
+        		<div>Certificates: </div>
         		<ul>
         			<% @certificates.each do |certi| %>
         				<li><%= link_to certi, employees_download_file_path(download_path: certi) %></li>

@@ -16,6 +16,5 @@ Rails.application.routes.draw do
   root "employeeinfodetails#index"
 
   get "employees/download_file" => "employeeinfodetails#download_file"
-
   
 end
