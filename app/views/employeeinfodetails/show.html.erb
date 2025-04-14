@@ -1,44 +1,51 @@
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8 mt-4">
-        	<h4 class="mt-2">
-        		<%= "#{@employee.firstname} #{@employee.lastname}" %>
-        	</h4>
-        	<div class="mb-1">
-        		<span>CV: </span>
-        		<%= link_to @cv_file_path, employees_download_file_path(download_path: @cv_file_path) %>
-        	</div>
+      <h2 class="mb-4">
+        <%= "#{@employee.firstname} #{@employee.lastname}" %>
+      </h2>
 
-        	<div class="mb-1">
-        		<span>Photo: </span>
-        		<%= link_to @my_pic_file_path, employees_download_file_path(download_path: @my_pic_file_path) %>
-        	</div>
+      <div class="mb-4">
+        <h5>CV</h5>
+        <p>
+          <%= link_to File.basename(@cv_file_path), employees_download_file_path(download_path: @cv_file_path), class: 'link-primary' %>
+        </p>
+      </div>
 
-        	<div>
-        		<div>
-        			<% if @employee.pan_card.attached? %>
-						<p>PAN Card:</p>
-						<%= image_tag url_for(@employee.pan_card), alt: "Pan Card", width: 200 %>
-						<% else %>
-						<p>No PAN card uploaded.</p>
-					<% end %>
-        		</div>
-        	</div>
+      <div class="mb-4">
+        <h5>Photo</h5>
+        <p>
+          <%= link_to File.basename(@my_pic_file_path), employees_download_file_path(download_path: @my_pic_file_path), class: 'link-primary' %>
+        </p>
+      </div>
 
-        	<div>
-        		<div>Certificates: </div>
-        		<ul>
-        			<% @certificates.each do |certi| %>
-        				<li><%= link_to certi, employees_download_file_path(download_path: certi) %></li>
-        			<% end %>
-        		</ul>
-        	</div>
+      <div class="mb-4">
+        <h5>PAN Card</h5>
+        <% if @employee.pan_card.attached? %>
+          <%= image_tag url_for(@employee.pan_card), alt: "PAN Card", class: "img-thumbnail mt-2", width: 200 %>
+        <% else %>
+          <p class="text-muted mt-2">No PAN card uploaded.</p>
+        <% end %>
+      </div>
 
-        	<div class="mt-2">
-                <%= link_to 'Back', employeeinfodetails_path, class: 'btn btn-secondary' %>
-        	</div>
-        </div>
+      <div class="mb-4">
+        <h5>Certificates</h5>
+        <% if @certificates.any? %>
+          <ul class="list-group">
+            <% @certificates.each do |certi| %>
+              <li class="list-group-item">
+                <%= link_to File.basename(certi), employees_download_file_path(download_path: certi), class: "text-decoration-none" %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="text-muted">No certificates uploaded.</p>
+        <% end %>
+      </div>
+
+      <%= link_to 'Back', employeeinfodetails_path, class: 'btn btn-secondary mt-3' %>
+
     </div>
+  </div>
 </div>

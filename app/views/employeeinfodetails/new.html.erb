@@ -1,62 +1,63 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8 mt-4">
-      <%= form_with model: @employee, url: employeeinfodetails_path(@employee), method: :post, local: true do |f| %>
-        <div class="mb-2">
-          <span>First name: </span>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+
+      <h2 class="mb-4">New Employee Information</h2>
+
+      <%= form_with model: @employee, url: employeeinfodetails_path(@employee), method: :post, local: true, html: { multipart: true } do |f| %>
+        
+        <div class="mb-3">
+          <%= f.label :firstname, "First Name" %>
           <%= f.text_field :firstname, required: true, class: "form-control" %>
         </div>
 
-        <div class="mb-2">
-          <span>Last name: </span>
+        <div class="mb-3">
+          <%= f.label :lastname, "Last Name" %>
           <%= f.text_field :lastname, required: true, class: "form-control" %>
         </div>
 
-        <div class="mb-2">
-          <span>Cv file: </span>
+        <div class="mb-3">
+          <%= label_tag :cv, "CV File" %>
           <%= file_field_tag :cv, required: true, class: "form-control" %>
         </div>
 
-        <div class="mb-2">
-          <span>Photo file: </span>
+        <div class="mb-3">
+          <%= label_tag :photo, "Photo File" %>
           <%= file_field_tag :photo, required: true, class: "form-control" %>
         </div>
 
         <div class="mb-4">
-          <span>Pan card pic blob: </span>
+          <%= f.label :pan_card, "PAN Card File" %>
           <%= f.file_field :pan_card, required: true, class: "form-control" %>
         </div>
 
-        <div class="mb-2">
+        <div class="mb-3">
           <h5>Certificates</h5>
+          <%= link_to 'Add Certificate', '#', class: 'btn btn-outline-primary add-certicate' %>
         </div>
-        <div class="mb-2">
-          <%= link_to 'Add Certificates', 'javascript:void(0)', class: 'btn btn-primary add-certicate' %>
-        </div>
-        <div class="certificate_list"></div>
 
-        <div class="mb-2">
+        <div class="certificate_list mb-4"></div>
+
+        <div class="d-flex gap-2">
           <%= f.submit 'Submit', class: 'btn btn-success submit-emp-form' %>
-        </div>
-
-        <div class="mb-2">
           <%= link_to 'Back', employeeinfodetails_path, class: 'btn btn-secondary' %>
         </div>
+
       <% end %>
     </div>
   </div>
 </div>
 
+<!-- Hidden certificate field template -->
 <div class="certificate_fields d-none">
-  <div class="certi-box mb-2">
-    <div class="row">
-      <div class="col-8">
+  <div class="certi-box mb-3">
+    <div class="row g-2 align-items-center">
+      <div class="col-9">
         <%= file_field_tag "employee[employeecertificates_attributes][][certi]", class: "form-control certificate-file" %>
       </div>
-      <div class="col-4">
-        <%= link_to "javascript:void(0)", class: 'btn btn-danger remove_certi' do %>
-          <i class="bi bi-trash3"></i>
+      <div class="col-3">
+        <%= link_to '#', class: 'btn btn-danger remove_certi w-100' do %>
+          <i class="bi bi-trash3 me-1"></i> Remove
         <% end %>
       </div>
     </div>

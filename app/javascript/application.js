@@ -1,69 +1,81 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 
-
-$(document).on('turbo:load', function(e) {
-	addCertificate();
-	submitEmployeeForm();
+document.addEventListener('turbo:load', () => {
+  handleCertificateAddition();
+  handleFormSubmission();
 });
 
-function addCertificate() {
-	$('.add-certicate').on('click', function(e) {
-		if($('form .certi-box').length < 10) {
-			$('.certificate_list').append($('.certificate_fields.d-none').html());
-		} else {
-			toastr.error("A maximum of 10 certificates are only allowed!.")
-		}
-		removeCerticate();
-		e.stopImmediatePropagation();
-	});
+function handleCertificateAddition() {
+  document.querySelectorAll('.add-certicate').forEach(button => {
+    button.addEventListener('click', e => {
+      const certiBoxes = document.querySelectorAll('form .certi-box');
+      if (certiBoxes.length < 10) {
+        const certTemplate = document.querySelector('.certificate_fields.d-none');
+        const certList = document.querySelector('.certificate_list');
+        if (certTemplate && certList) {
+          certList.insertAdjacentHTML('beforeend', certTemplate.innerHTML);
+        }
+      } else {
+        toastr.error("A maximum of 10 certificates are only allowed!");
+      }
+
+      attachRemoveCertificateHandlers();
+      e.stopImmediatePropagation();
+    });
+  });
 }
 
-function removeCerticate() {
-	$('.remove_certi').on('click', function(e) {
-		$(this).closest('.certi-box').remove();
-		e.stopImmediatePropagation();
-	});
+function attachRemoveCertificateHandlers() {
+  document.querySelectorAll('.remove_certi').forEach(button => {
+    button.addEventListener('click', e => {
+      const certiBox = button.closest('.certi-box');
+      if (certiBox) certiBox.remove();
+      e.stopImmediatePropagation();
+    });
+  });
 }
 
-function submitEmployeeForm() {
-	$('.submit-emp-form').on('click', function(e) {
+function handleFormSubmission() {
+  document.querySelectorAll('.submit-emp-form').forEach(button => {
+    button.addEventListener('click', e => {
+      const certiBoxes = document.querySelectorAll('form .certi-box');
+      if (certiBoxes.length === 0) {
+        toastr.error("You need to add at least one certificate.");
+        e.preventDefault();
+        return;
+      }
 
-        var foundCerti = ($('form .certi-box').length != 0);
-            if(!foundCerti) {
-                toastr.error("You need to add atleast one certificate");
-                e.preventDefault();
-            }
+      const allFilesPresent = Array.from(document.querySelectorAll('form .certificate-file'))
+        .every(fileInput => fileInput.value.trim().length > 0);
 
-            if(foundCerti) {
-                $('form .certificate-file').each(function(index, element) {
-                    if($(this).val().length == 0) {
-                        foundCerti=false;
-                        return false;
-                    }
-                });
-        
-                if(!foundCerti) {
-                    toastr.error("Certificates Can't be blank");
-                    e.preventDefault();
-                }
-            }
+      if (!allFilesPresent) {
+        toastr.error("Certificates can't be blank.");
+        e.preventDefault();
+        return;
+      }
 
-            if(foundCerti) {
-                var photoFileExtension = $("#photo").val().split('.').pop().toLowerCase();
-                var panCardFileExtension = $("#employeeinfo_pan_card").val().split('.').pop().toLowerCase();
-                var allowedFileExtesion = ['png', 'jpeg', 'jpg']
-                if(!allowedFileExtesion.includes(photoFileExtension)){
-                    toastr.error("Photo must be png/jpeg/jpg only");
-                    foundCerti=false;
-                    e.preventDefault();
-                }
-            
-                if(foundCerti && !allowedFileExtesion.includes(panCardFileExtension)){
-                    toastr.error("Pan card must be png/jpeg/jpg only");
-                    foundCerti=false;
-                    e.preventDefault();
-                }
-                       }
-	});
+      const allowedExtensions = ['png', 'jpeg', 'jpg'];
+      const photo = document.querySelector("#photo");
+      const panCard = document.querySelector("#employeeinfo_pan_card");
+
+      if (!hasValidExtension(photo, allowedExtensions)) {
+        toastr.error("Photo must be png, jpeg, or jpg.");
+        e.preventDefault();
+        return;
+      }
+
+      if (!hasValidExtension(panCard, allowedExtensions)) {
+        toastr.error("Pan card must be png, jpeg, or jpg.");
+        e.preventDefault();
+        return;
+      }
+    });
+  });
+}
+
+function hasValidExtension(fileInput, allowed) {
+  if (!fileInput || !fileInput.value) return false;
+  const extension = fileInput.value.split('.').pop().toLowerCase();
+  return allowed.includes(extension);
 }
